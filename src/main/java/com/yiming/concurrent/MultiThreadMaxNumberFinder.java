@@ -1,6 +1,12 @@
 package com.yiming.concurrent;
 
-import java.util.concurrent.*;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by yiming on 2018-03-20 20:04.
@@ -32,12 +38,9 @@ public class MultiThreadMaxNumberFinder {
 
     public static void main(String[] args) {
         int size = 100000;
-        Integer[] data = new Integer[size];
-        for (int i = 0; i < size; i++) {
-            data[i] = (int) (Math.random() * size);
-        }
+        List<Integer> list = Stream.generate(() -> (int) (Math.random() * size)).limit(size).collect(Collectors.toList());
         try {
-            System.out.println(max(data));
+            System.out.println(max(list.toArray(new Integer[list.size()])));
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
