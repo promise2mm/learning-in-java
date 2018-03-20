@@ -38,9 +38,7 @@ public class MultiThreadMaxNumberFinder {
         }
         try {
             System.out.println(max(data));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
