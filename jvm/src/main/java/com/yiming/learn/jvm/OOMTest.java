@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * Created by andyni on 2018/4/7.
+ * Created by yiming on 2018/4/7.
  */
 public class OOMTest {
 
