@@ -21,4 +21,21 @@ public class OOMTest {
 
     }
 
+    /**
+     *
+     */
+    @Test
+    public void testStackOverFlow() {
+        new StackOverFlowObj().incre(1);
+    }
+
+    class StackOverFlowObj {
+
+        private int id;
+
+        int incre(int id) {
+            return incre(++id);
+        }
+    }
+
 }
