@@ -39,12 +39,6 @@ public class OOMTest {
     }
     @Test
     public void test() {
-        System.out.println("msg from dev");
+        System.out.println("msg from merge");
     }
-
-    @Test
-    public void test() {
-        System.out.println("msg from test");
-    }
-
 }
