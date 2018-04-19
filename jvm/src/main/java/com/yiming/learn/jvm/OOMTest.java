@@ -37,5 +37,9 @@ public class OOMTest {
             return incre(++id);
         }
     }
+    @Test
+    public void test() {
+        System.out.println("msg from dev");
+    }
 
 }
