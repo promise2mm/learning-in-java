@@ -38,4 +38,9 @@ public class OOMTest {
         }
     }
 
+    @Test
+    public void test() {
+        System.out.println("msg from test");
+    }
+
 }
