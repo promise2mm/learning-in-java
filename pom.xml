@@ -13,6 +13,7 @@
         <module>jvm</module>
         <module>database</module>
         <module>spring</module>
+        <module>gitworkflow</module>
     </modules>
 
     <dependencies>

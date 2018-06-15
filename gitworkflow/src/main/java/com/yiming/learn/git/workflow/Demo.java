@@ -1,0 +1,13 @@
+package com.yiming.learn.git.workflow;
+
+/**
+ * Created by yiming on 2018-06-15 10:27. Description:
+ *
+ * @author yiming
+ */
+public class Demo {
+
+    public static void main(String[] args) {
+        System.out.println("v1.0.1 - 001");
+    }
+}
