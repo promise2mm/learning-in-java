@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,20 +25,18 @@ import org.junit.Test;
 
 public class StreamTest {
 
-    private List<User> users;
+    private List<Student> students;
 
-    public static void main(String[] args) {
-        //Lists是Guava中的一个工具类
-//        List<Integer> nums = Lists.newArrayList(1, null, 3, 4, null, 6);
-//        nums.stream().filter(num -> num != null).collect(nums );
-//        nums.stream().forEach(System.out::println);
-        Stream.generate(Math::random).limit(100).forEach(System.out::println);
-        new StreamTest().testGenerate();
+    @Test
+    public void test() {
+        List<Integer> nums = Lists.newArrayList(1, null, 3, 4, null, 6);
+        nums = nums.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        nums.forEach(System.out::println);
     }
 
     @Before
     public void setUp() {
-        users = buildUsers();
+        students = buildUsers();
     }
 
     @Test
@@ -48,22 +47,22 @@ public class StreamTest {
     @Test
     public void testMap() {
         System.out.println("获取全部姓名:");
-        List<String> names = users.stream().map(User::getName).collect(Collectors.toList());
+        List<String> names = students.stream().map(Student::getName).collect(Collectors.toList());
         System.out.println(names);
 
         System.out.println("构建map:");
-        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(User::getId, o -> o));
+        Map<Integer, Student> userMap = students.stream().collect(Collectors.toMap(Student::getId, o -> o));
         userMap.forEach((k, v) -> System.out.println(k + ", " + v.getName()));
 
-        userMap = users.stream().collect(Collectors.toMap(User::getId, Function.identity()));
+        userMap = students.stream().collect(Collectors.toMap(Student::getId, Function.identity()));
         userMap.forEach((k, v) -> System.out.println(k + ", " + v.getName()));
 
-        Map<Integer, Map<SportTypeEnum, List<User>>> userMapByGrade
-            = users.stream().collect(Collectors.groupingBy(User::getGrade, Collectors.groupingBy(u -> u.getHobby().getType())));
+        Map<Integer, Map<SportTypeEnum, List<Student>>> userMapByGrade
+            = students.stream().collect(Collectors.groupingBy(Student::getGrade, Collectors.groupingBy(u -> u.getHobby().getType())));
         userMapByGrade.forEach((k, v) -> System.out.println(k + "班: " + JSON.toJSONString(v)));
 
         Map<Integer, IntSummaryStatistics> userCountMap
-            = users.stream().collect(Collectors.groupingBy(User::getGrade, Collectors.summarizingInt(User::getAge)));
+            = students.stream().collect(Collectors.groupingBy(Student::getGrade, Collectors.summarizingInt(Student::getAge)));
         userCountMap.forEach((k, v) -> System.out.println(k + "班平均年龄 - " + String.format("%.1f岁", v.getAverage())));
         userCountMap.forEach((k, v) -> System.out.println(k + "班人数 - " + String.format("%d人", v.getCount())));
         userCountMap.forEach((k, v) -> System.out.println(k + "班最小年龄为 - " + String.format("%d岁", v.getMin())));
@@ -74,30 +73,35 @@ public class StreamTest {
     @Test
     public void testFilter() {
         System.out.println("爱好为球类运动的同学:");
-        users.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).forEach(System.out::println);
+        students.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).forEach(System.out::println);
 
         System.out.println("爱球类的女生:");
-        users.stream().filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.BALL_GAME.equals(o.getHobby().getType()))
+        students.stream().filter(o -> o.getSex().equals(SEXEnum.GIRL)
+            && SportTypeEnum.BALL_GAME.equals(o.getHobby().getType()))
             .forEach(System.out::println);
 
         System.out.println("爱田径运动的姓\"JOBS\"女生:");
-        users.stream()
-            .filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.ATHLETICS.equals(o.getHobby().getType()) && o.getName().endsWith("JOBS"))
+        students.stream()
+            .filter(o -> o.getSex().equals(SEXEnum.GIRL)
+                && SportTypeEnum.ATHLETICS.equals(o.getHobby().getType())
+                && o.getName().endsWith("JOBS"))
             .forEach(System.out::println);
 
         //收集结果集
-        List<User> ballGameUser = users.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).collect(Collectors.toList());
-        System.out.println(ballGameUser);
+        List<Student> ballGameStudent = students.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType()))
+            .collect(Collectors.toList());
+        System.out.println(ballGameStudent);
     }
 
     @Test
     public void testDistinct() {
         System.out.println("去重:");
-        User user1 = User.builder().id(1).name("TOM.F").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build())
+        Student student1 = Student.builder().id(1).name("TOM.F").sex(SEXEnum.BOY)
+            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build())
             .build();
-        users.add(user1);
-        users = users.stream().distinct().collect(Collectors.toList());
-        System.out.println(users.size());
+        students.add(student1);
+        students = students.stream().distinct().collect(Collectors.toList());
+        System.out.println(students.size());
     }
 
     @Test
@@ -107,21 +111,21 @@ public class StreamTest {
         System.out.println(list.stream().reduce((o1, o2) -> o1 + o2).get());
     }
 
-    private List<User> buildUsers() {
-        User user1 = User.builder().id(1).grade(1).age(10).name("TOM.F").sex(SEXEnum.BOY)
+    private List<Student> buildUsers() {
+        Student student1 = Student.builder().id(1).grade(1).age(10).name("TOM.F").sex(SEXEnum.BOY)
             .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build()).build();
-        User user2 = User.builder().id(2).grade(2).age(18).name("B.M").sex(SEXEnum.BOY)
+        Student student2 = Student.builder().id(2).grade(2).age(18).name("B.M").sex(SEXEnum.BOY)
             .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("足球").build()).build();
-        User user3 = User.builder().id(3).grade(1).age(19).name("C.F").sex(SEXEnum.GIRL)
+        Student student3 = Student.builder().id(3).grade(1).age(19).name("C.F").sex(SEXEnum.GIRL)
             .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("台球").build()).build();
-        User user4 = User.builder().id(4).grade(2).age(22).name("S.JOBS").sex(SEXEnum.GIRL)
+        Student student4 = Student.builder().id(4).grade(2).age(22).name("S.JOBS").sex(SEXEnum.GIRL)
             .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
-        User user5 = User.builder().id(5).grade(1).age(17).name("E.T").sex(SEXEnum.BOY)
+        Student student5 = Student.builder().id(5).grade(1).age(17).name("E.T").sex(SEXEnum.BOY)
             .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跳高").build()).build();
-        User user6 = User.builder().id(6).grade(2).age(22).name("F.JOBS").sex(SEXEnum.UNKNOWN)
+        Student student6 = Student.builder().id(6).grade(2).age(22).name("F.JOBS").sex(SEXEnum.UNKNOWN)
             .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
 
-        return Lists.newArrayList(user1, user2, user3, user4, user5, user6);
+        return Lists.newArrayList(student1, student2, student3, student4, student5, student6);
     }
 
     @AllArgsConstructor
@@ -164,7 +168,7 @@ public class StreamTest {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class User {
+    static class Student {
 
         private Integer id;
         private Integer grade;
