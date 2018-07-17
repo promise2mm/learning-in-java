@@ -21,7 +21,7 @@
 ###### database
   * todo
 ###### gitworkflow
-  * todp
+  * todo
 ###### java-basic
   * todo
 ###### jvm
