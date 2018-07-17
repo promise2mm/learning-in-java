@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,7 +43,17 @@ public class StreamTest {
 
     @Test
     public void testGenerate() {
-        Stream.generate(Math::random).limit(100).forEach(System.out::println);
+
+        Random random = new Random(100);
+        Set<Integer> collect = Stream.generate(random::nextInt).limit(100).collect(Collectors.toSet());
+//        while (collect.size() != 100) {
+//
+//        }
+
+        Stream.generate(Math::random).distinct().limit(120).
+            mapToDouble(s -> s * 1000).distinct().forEach(s -> System.out.println((int) s/10));
+        new Random(100).nextInt();
+
     }
 
     @Test
