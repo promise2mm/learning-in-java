@@ -1,17 +1,22 @@
 package com.yiming.learn.java.basic.java8.stream;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import lombok.*;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.Arrays;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Created by yiming on 2018/1/11.
@@ -53,6 +58,17 @@ public class StreamTest {
         userMap = users.stream().collect(Collectors.toMap(User::getId, Function.identity()));
         userMap.forEach((k, v) -> System.out.println(k + ", " + v.getName()));
 
+        Map<Integer, Map<SportTypeEnum, List<User>>> userMapByGrade
+            = users.stream().collect(Collectors.groupingBy(User::getGrade, Collectors.groupingBy(u -> u.getHobby().getType())));
+        userMapByGrade.forEach((k, v) -> System.out.println(k + "班: " + JSON.toJSONString(v)));
+
+        Map<Integer, IntSummaryStatistics> userCountMap
+            = users.stream().collect(Collectors.groupingBy(User::getGrade, Collectors.summarizingInt(User::getAge)));
+        userCountMap.forEach((k, v) -> System.out.println(k + "班平均年龄 - " + String.format("%.1f岁", v.getAverage())));
+        userCountMap.forEach((k, v) -> System.out.println(k + "班人数 - " + String.format("%d人", v.getCount())));
+        userCountMap.forEach((k, v) -> System.out.println(k + "班最小年龄为 - " + String.format("%d岁", v.getMin())));
+        userCountMap.forEach((k, v) -> System.out.println(k + "班最大年龄为 - " + String.format("%d岁", v.getMax())));
+
     }
 
     @Test
@@ -61,10 +77,13 @@ public class StreamTest {
         users.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).forEach(System.out::println);
 
         System.out.println("爱球类的女生:");
-        users.stream().filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).forEach(System.out::println);
+        users.stream().filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.BALL_GAME.equals(o.getHobby().getType()))
+            .forEach(System.out::println);
 
         System.out.println("爱田径运动的姓\"JOBS\"女生:");
-        users.stream().filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.ATHLETICS.equals(o.getHobby().getType()) && o.getName().endsWith("JOBS")).forEach(System.out::println);
+        users.stream()
+            .filter(o -> o.getSex().equals(SEXEnum.GIRL) && SportTypeEnum.ATHLETICS.equals(o.getHobby().getType()) && o.getName().endsWith("JOBS"))
+            .forEach(System.out::println);
 
         //收集结果集
         List<User> ballGameUser = users.stream().filter(o -> SportTypeEnum.BALL_GAME.equals(o.getHobby().getType())).collect(Collectors.toList());
@@ -74,7 +93,8 @@ public class StreamTest {
     @Test
     public void testDistinct() {
         System.out.println("去重:");
-        User user1 = User.builder().id(1).name("TOM.F").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build()).build();
+        User user1 = User.builder().id(1).name("TOM.F").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build())
+            .build();
         users.add(user1);
         users = users.stream().distinct().collect(Collectors.toList());
         System.out.println(users.size());
@@ -88,12 +108,18 @@ public class StreamTest {
     }
 
     private List<User> buildUsers() {
-        User user1 = User.builder().id(1).name("TOM.F").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build()).build();
-        User user2 = User.builder().id(2).name("B.M").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("足球").build()).build();
-        User user3 = User.builder().id(3).name("C.F").sex(SEXEnum.GIRL).hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("台球").build()).build();
-        User user4 = User.builder().id(4).name("S.JOBS").sex(SEXEnum.GIRL).hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
-        User user5 = User.builder().id(5).name("E.T").sex(SEXEnum.BOY).hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跳高").build()).build();
-        User user6 = User.builder().id(6).name("F.JOBS").sex(SEXEnum.UNKNOWN).hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
+        User user1 = User.builder().id(1).grade(1).age(10).name("TOM.F").sex(SEXEnum.BOY)
+            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build()).build();
+        User user2 = User.builder().id(2).grade(2).age(18).name("B.M").sex(SEXEnum.BOY)
+            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("足球").build()).build();
+        User user3 = User.builder().id(3).grade(1).age(19).name("C.F").sex(SEXEnum.GIRL)
+            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("台球").build()).build();
+        User user4 = User.builder().id(4).grade(2).age(22).name("S.JOBS").sex(SEXEnum.GIRL)
+            .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
+        User user5 = User.builder().id(5).grade(1).age(17).name("E.T").sex(SEXEnum.BOY)
+            .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跳高").build()).build();
+        User user6 = User.builder().id(6).grade(2).age(22).name("F.JOBS").sex(SEXEnum.UNKNOWN)
+            .hobby(Hobby.builder().type(SportTypeEnum.ATHLETICS).name("跑步").build()).build();
 
         return Lists.newArrayList(user1, user2, user3, user4, user5, user6);
     }
@@ -105,7 +131,7 @@ public class StreamTest {
         GIRL(2, "女生");
 
         private static Map<Integer, SEXEnum> map =
-                Arrays.stream(SEXEnum.values()).collect(Collectors.toMap(SEXEnum::getCode, sexEnum -> sexEnum));
+            Arrays.stream(SEXEnum.values()).collect(Collectors.toMap(SEXEnum::getCode, sexEnum -> sexEnum));
         @Getter
         private Integer code;
         @Getter
@@ -123,7 +149,7 @@ public class StreamTest {
         ATHLETICS(2, "田径");
 
         private static Map<Integer, SportTypeEnum> map =
-                Arrays.stream(SportTypeEnum.values()).collect(Collectors.toMap(SportTypeEnum::getCode, sportTypeEnum -> sportTypeEnum));
+            Arrays.stream(SportTypeEnum.values()).collect(Collectors.toMap(SportTypeEnum::getCode, sportTypeEnum -> sportTypeEnum));
         @Getter
         private Integer code;
         @Getter
@@ -139,7 +165,9 @@ public class StreamTest {
     @NoArgsConstructor
     @AllArgsConstructor
     static class User {
+
         private Integer id;
+        private Integer grade;
         private String name;
         private SEXEnum sex;
         private Integer age = 20;
@@ -151,6 +179,7 @@ public class StreamTest {
     @NoArgsConstructor
     @AllArgsConstructor
     static class Hobby {
+
         private SportTypeEnum type;
         private String name;
     }
