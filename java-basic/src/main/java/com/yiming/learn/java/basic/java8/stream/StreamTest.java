@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,15 +42,9 @@ public class StreamTest {
 
     @Test
     public void testGenerate() {
-
         Random random = new Random(100);
-        Set<Integer> collect = Stream.generate(random::nextInt).limit(100).collect(Collectors.toSet());
-//        while (collect.size() != 100) {
-//
-//        }
-
         Stream.generate(Math::random).distinct().limit(120).
-            mapToDouble(s -> s * 1000).distinct().forEach(s -> System.out.println((int) s/10));
+            mapToDouble(s -> s * 1000).distinct().forEach(s -> System.out.println((int) s / 10));
         new Random(100).nextInt();
 
     }
@@ -63,11 +56,8 @@ public class StreamTest {
         System.out.println(names);
 
         System.out.println("构建map:");
-        Map<Integer, Student> userMap = students.stream().collect(Collectors.toMap(Student::getId, o -> o));
-        userMap.forEach((k, v) -> System.out.println(k + ", " + v.getName()));
-
-        userMap = students.stream().collect(Collectors.toMap(Student::getId, Function.identity()));
-        userMap.forEach((k, v) -> System.out.println(k + ", " + v.getName()));
+        Map<Integer, Student> userMap = students.stream().collect(Collectors.toMap(Student::getId, Function.identity()));
+        System.out.println(JSON.toJSONString(userMap));
 
         Map<Integer, Map<SportTypeEnum, List<Student>>> userMapByGrade
             = students.stream().collect(Collectors.groupingBy(Student::getGrade, Collectors.groupingBy(u -> u.getHobby().getType())));
@@ -79,7 +69,6 @@ public class StreamTest {
         userCountMap.forEach((k, v) -> System.out.println(k + "班人数 - " + String.format("%d人", v.getCount())));
         userCountMap.forEach((k, v) -> System.out.println(k + "班最小年龄为 - " + String.format("%d岁", v.getMin())));
         userCountMap.forEach((k, v) -> System.out.println(k + "班最大年龄为 - " + String.format("%d岁", v.getMax())));
-
     }
 
     @Test
@@ -107,13 +96,12 @@ public class StreamTest {
 
     @Test
     public void testDistinct() {
-        System.out.println("去重:");
-        Student student1 = Student.builder().id(1).name("TOM.F").sex(SEXEnum.BOY)
-            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build())
-            .build();
-        students.add(student1);
+        System.out.println("before: " + students.size());
+        Student duplicatedStudent = Student.builder().id(1).grade(1).age(10).name("TOM.F").sex(SEXEnum.BOY)
+            .hobby(Hobby.builder().type(SportTypeEnum.BALL_GAME).name("篮球").build()).build();
+        students.add(duplicatedStudent);
         students = students.stream().distinct().collect(Collectors.toList());
-        System.out.println(students.size());
+        System.out.println("after distinct: " + students.size());
     }
 
     @Test
@@ -140,6 +128,9 @@ public class StreamTest {
         return Lists.newArrayList(student1, student2, student3, student4, student5, student6);
     }
 
+    /**
+     * 性别枚举
+     */
     @AllArgsConstructor
     enum SEXEnum {
         UNKNOWN(0, "未知"),
@@ -158,6 +149,9 @@ public class StreamTest {
         }
     }
 
+    /**
+     * 体育运动枚举
+     */
     @AllArgsConstructor
     enum SportTypeEnum {
         OTHERS(0, "其他"),
@@ -176,6 +170,9 @@ public class StreamTest {
         }
     }
 
+    /**
+     * 学生类定义
+     */
     @Data
     @Builder
     @NoArgsConstructor
@@ -183,22 +180,50 @@ public class StreamTest {
     static class Student {
 
         private Integer id;
+        /**
+         * 年级
+         */
         private Integer grade;
+        /**
+         * 姓名
+         */
         private String name;
+        /**
+         * 性别
+         *
+         * @see SEXEnum
+         */
         private SEXEnum sex;
-        private Integer age = 20;
+        /**
+         * 年龄
+         */
+        private Integer age;
+        /**
+         * 爱好
+         *
+         * @see Hobby
+         */
         private Hobby hobby;
     }
 
+    /**
+     * 兴趣爱好枚举
+     */
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     static class Hobby {
 
+        /**
+         * 体育运动类型
+         *
+         * @see SportTypeEnum
+         */
         private SportTypeEnum type;
+        /**
+         * 体育运动名称
+         */
         private String name;
     }
-
-
 }
