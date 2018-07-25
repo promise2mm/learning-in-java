@@ -14,6 +14,7 @@
         <module>database</module>
         <module>spring</module>
         <module>gitworkflow</module>
+      <module>algorithm</module>
     </modules>
 
     <dependencies>
