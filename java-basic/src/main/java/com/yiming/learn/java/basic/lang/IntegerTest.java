@@ -14,6 +14,8 @@ public class IntegerTest {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        // 循环时调用Integer.valueOf(i)
+        // @see Integer.valueOf(int i)
         for (Integer i = 1; i < 4; i++) {
             System.out.println(i);
         }
