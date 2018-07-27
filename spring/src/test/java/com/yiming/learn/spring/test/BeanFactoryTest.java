@@ -1,7 +1,8 @@
 package com.yiming.learn.spring.test;
 
 import com.yiming.learn.spring.tiny.BeanDefinition;
-import com.yiming.learn.spring.tiny.BeanFactory;
+import com.yiming.learn.spring.tiny.factory.AutowireCapableBeanFactory;
+import com.yiming.learn.spring.tiny.factory.BeanFactory;
 import org.junit.Test;
 
 /**
@@ -15,11 +16,12 @@ public class BeanFactoryTest {
     @Test
     public void test() {
         // 1. 初始化工厂
-        BeanFactory beanFactory = new BeanFactory();
+        BeanFactory beanFactory = new AutowireCapableBeanFactory();
 
         // 2. 定义并注册bean
-        BeanDefinition beanDefinition = new BeanDefinition(new HelloWorldService());
-        beanFactory.registryBean("helloWorldService", beanDefinition);
+        BeanDefinition beanDefinition = new BeanDefinition();
+        beanDefinition.setBeanClassName("com.yiming.learn.spring.test.HelloWorldService");
+        beanFactory.registryBeanDefinition("helloWorldService", beanDefinition);
 
         // 3. 获取并使用bean
         HelloWorldService helloWorldService = (HelloWorldService) beanFactory.getBean("helloWorldService");
