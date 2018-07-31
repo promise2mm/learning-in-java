@@ -1,6 +1,6 @@
 package com.yiming.learn.spring.tiny.context;
 
-import com.yiming.learn.spring.tiny.HelloWorldService;
+import com.yiming.learn.spring.tiny.HelloWorldServiceImpl;
 import org.junit.Test;
 
 /**
@@ -14,7 +14,7 @@ public class ClassPathXmlApplicationContextTest {
     @Test
     public void test() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("tinyioc.xml");
-        HelloWorldService helloWorldService = (HelloWorldService) context.getBean("helloWorldService");
+        HelloWorldServiceImpl helloWorldService = (HelloWorldServiceImpl) context.getBean("helloWorldService");
         helloWorldService.sayHello();
     }
 

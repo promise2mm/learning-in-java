@@ -26,8 +26,8 @@ public class BeanFactoryTest {
         reader.getRegistry().forEach(beanFactory::registryBeanDefinition);
 
         // 3. 获取并使用bean
-        HelloWorldService helloWorldService = (HelloWorldService) beanFactory.getBean("helloWorldService");
-        helloWorldService.getOutputService().sayHello();
+        HelloWorldServiceImpl helloWorldService = (HelloWorldServiceImpl) beanFactory.getBean("helloWorldService");
+        helloWorldService.sayHello();
     }
 
     @Test
@@ -40,8 +40,8 @@ public class BeanFactoryTest {
 
         factory.preInstantiateSingletons();
 
-        HelloWorldService helloWorldService = (HelloWorldService) factory.getBean("helloWorldService");
-        helloWorldService.getOutputService().sayHello();
+        HelloWorldServiceImpl helloWorldService = (HelloWorldServiceImpl) factory.getBean("helloWorldService");
+        helloWorldService.sayHello();
     }
 
 }

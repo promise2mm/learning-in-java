@@ -8,17 +8,13 @@ package com.yiming.learn.spring.tiny;
  */
 public class OutputService {
 
-    private String text;
+    private HelloWorldService helloWorldService;
 
-    public void sayHello() {
-        System.out.println("Hello " + text + "!");
+    public void sayHello(String text) {
+        System.out.println("OutputService: Hello " + text + "!");
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setHelloWorldService(HelloWorldService helloWorldService) {
+        this.helloWorldService = helloWorldService;
     }
 }
