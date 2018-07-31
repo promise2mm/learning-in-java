@@ -2,6 +2,7 @@ package com.yiming.learn.spring.tiny.xml;
 
 import com.yiming.learn.spring.tiny.AbstractBeanDefinitionReader;
 import com.yiming.learn.spring.tiny.BeanDefinition;
+import com.yiming.learn.spring.tiny.BeanReference;
 import com.yiming.learn.spring.tiny.PropertyValue;
 import com.yiming.learn.spring.tiny.PropertyValues;
 import com.yiming.learn.spring.tiny.io.ResourceLoader;
@@ -70,8 +71,21 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             if (propertyNode instanceof Element) {
                 Element element = (Element) propertyNode;
                 PropertyValues propertyValues = beanDefinition.getPropertyValues();
-                PropertyValue propertyValue = new PropertyValue(element.getAttribute("name"), element.getAttribute("value"));
-                propertyValues.addPropertyValue(propertyValue);
+                String name = element.getAttribute("name");
+                String value = element.getAttribute("value");
+                if (value != null && value.length() > 0) {
+                    propertyValues.addPropertyValue(new PropertyValue(name, value));
+                } else {
+                    String ref = element.getAttribute("ref");
+                    if (ref == null || ref.length() == 0) {
+                        throw new IllegalArgumentException(
+                            "Configuration error: <property> element for property ["
+                                + name + "] must be specified a ref or value!");
+                    }
+                    BeanReference reference = new BeanReference();
+                    reference.setName(ref);
+                    propertyValues.addPropertyValue(new PropertyValue(name, reference));
+                }
             }
         }
     }

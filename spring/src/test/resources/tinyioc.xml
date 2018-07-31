@@ -6,6 +6,10 @@
   <bean id="helloWorldService" name="helloWorldService"
     class="com.yiming.learn.spring.tiny.HelloWorldService">
     <property name="text" value="yiming2"/>
+    <property name="outputService" ref="outputService"/>
+  </bean>
+  <bean name="outputService" class="com.yiming.learn.spring.tiny.OutputService">
+    <property name="text" value="World"/>
   </bean>
 
 </beans>

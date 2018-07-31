@@ -1,6 +1,8 @@
 package com.yiming.learn.spring.tiny.factory;
 
 import com.yiming.learn.spring.tiny.BeanDefinition;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractBeanFactory implements BeanFactory {
 
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+
+    private List<String> beanNames = new ArrayList<>();
 
     /**
      * 获取bean
@@ -38,6 +42,13 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         Object bean = doCreateBean(beanDefinition);
         beanDefinition.setBean(bean);
         beanDefinitionMap.put(name, beanDefinition);
+        beanNames.add(name);
+    }
+
+    public void preInstantiateSingletons() {
+        for (String beanName : beanNames) {
+            getBean(beanName);
+        }
     }
 
     /**

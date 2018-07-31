@@ -1,5 +1,6 @@
 package com.yiming.learn.spring.tiny;
 
+import com.yiming.learn.spring.tiny.factory.AbstractBeanFactory;
 import com.yiming.learn.spring.tiny.factory.AutowireCapableBeanFactory;
 import com.yiming.learn.spring.tiny.factory.BeanFactory;
 import com.yiming.learn.spring.tiny.io.ResourceLoader;
@@ -15,7 +16,7 @@ import org.junit.Test;
 public class BeanFactoryTest {
 
     @Test
-    public void test() throws Exception {
+    public void testLazy() throws Exception {
 
         // 1. 从xml文件读取bean配置
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(new ResourceLoader());
@@ -27,7 +28,21 @@ public class BeanFactoryTest {
 
         // 3. 获取并使用bean
         HelloWorldService helloWorldService = (HelloWorldService) beanFactory.getBean("helloWorldService");
-        helloWorldService.sayHello();
+        helloWorldService.getOutputService().sayHello();
+    }
+
+    @Test
+    public void testPreInstantiateSingletons() throws Exception {
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(new ResourceLoader());
+        reader.loadBeanDefinitions("tinyioc.xml");
+
+        AbstractBeanFactory factory = new AutowireCapableBeanFactory();
+        reader.getRegistry().forEach(factory::registryBeanDefinition);
+
+        factory.preInstantiateSingletons();
+
+        HelloWorldService helloWorldService = (HelloWorldService) factory.getBean("helloWorldService");
+        helloWorldService.getOutputService().sayHello();
     }
 
 }
