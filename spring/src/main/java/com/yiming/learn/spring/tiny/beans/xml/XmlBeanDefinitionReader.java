@@ -1,11 +1,11 @@
-package com.yiming.learn.spring.tiny.xml;
+package com.yiming.learn.spring.tiny.beans.xml;
 
 import com.yiming.learn.spring.tiny.AbstractBeanDefinitionReader;
 import com.yiming.learn.spring.tiny.BeanDefinition;
 import com.yiming.learn.spring.tiny.BeanReference;
 import com.yiming.learn.spring.tiny.PropertyValue;
 import com.yiming.learn.spring.tiny.PropertyValues;
-import com.yiming.learn.spring.tiny.io.ResourceLoader;
+import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

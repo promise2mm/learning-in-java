@@ -1,4 +1,4 @@
-package com.yiming.learn.spring.tiny.factory;
+package com.yiming.learn.spring.tiny.beans.factory;
 
 import com.yiming.learn.spring.tiny.BeanDefinition;
 import com.yiming.learn.spring.tiny.BeanReference;

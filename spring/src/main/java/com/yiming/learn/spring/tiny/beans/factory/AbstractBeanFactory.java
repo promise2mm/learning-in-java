@@ -1,4 +1,4 @@
-package com.yiming.learn.spring.tiny.factory;
+package com.yiming.learn.spring.tiny.beans.factory;
 
 import com.yiming.learn.spring.tiny.BeanDefinition;
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public abstract class AbstractBeanFactory implements BeanFactory {
      * @param name bean名称
      * @param beanDefinition bean定义
      */
-    @Override
     public void registryBeanDefinition(String name, BeanDefinition beanDefinition) {
         Object bean = doCreateBean(beanDefinition);
         beanDefinition.setBean(bean);

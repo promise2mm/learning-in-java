@@ -1,6 +1,6 @@
 package com.yiming.learn.spring.tiny;
 
-import com.yiming.learn.spring.tiny.io.ResourceLoader;
+import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
 import java.util.HashMap;
 import java.util.Map;
 

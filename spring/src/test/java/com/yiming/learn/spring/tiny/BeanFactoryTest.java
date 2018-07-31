@@ -1,10 +1,9 @@
 package com.yiming.learn.spring.tiny;
 
-import com.yiming.learn.spring.tiny.factory.AbstractBeanFactory;
-import com.yiming.learn.spring.tiny.factory.AutowireCapableBeanFactory;
-import com.yiming.learn.spring.tiny.factory.BeanFactory;
-import com.yiming.learn.spring.tiny.io.ResourceLoader;
-import com.yiming.learn.spring.tiny.xml.XmlBeanDefinitionReader;
+import com.yiming.learn.spring.tiny.beans.factory.AbstractBeanFactory;
+import com.yiming.learn.spring.tiny.beans.factory.AutowireCapableBeanFactory;
+import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
+import com.yiming.learn.spring.tiny.beans.xml.XmlBeanDefinitionReader;
 import org.junit.Test;
 
 /**
@@ -23,7 +22,7 @@ public class BeanFactoryTest {
         reader.loadBeanDefinitions("tinyioc.xml");
 
         // 2. 初始化工厂
-        BeanFactory beanFactory = new AutowireCapableBeanFactory();
+        AbstractBeanFactory beanFactory = new AutowireCapableBeanFactory();
         reader.getRegistry().forEach(beanFactory::registryBeanDefinition);
 
         // 3. 获取并使用bean

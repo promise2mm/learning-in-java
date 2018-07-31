@@ -1,4 +1,4 @@
-package com.yiming.learn.spring.tiny.io;
+package com.yiming.learn.spring.tiny.beans.io;
 
 import java.net.URL;
 

@@ -1,6 +1,6 @@
-package com.yiming.learn.spring.tiny.xml;
+package com.yiming.learn.spring.tiny.beans.xml;
 
-import com.yiming.learn.spring.tiny.io.ResourceLoader;
+import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
 import org.junit.Assert;
 import org.junit.Test;
 
