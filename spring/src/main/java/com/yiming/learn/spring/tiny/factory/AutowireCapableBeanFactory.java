@@ -1,6 +1,7 @@
 package com.yiming.learn.spring.tiny.factory;
 
 import com.yiming.learn.spring.tiny.BeanDefinition;
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -18,6 +19,12 @@ public class AutowireCapableBeanFactory extends AbstractBeanFactory {
      */
     @Override
     protected Object doCreateBean(BeanDefinition beanDefinition) {
+        Object bean = createInstance(beanDefinition);
+        applyPropertyValues(bean, beanDefinition);
+        return bean;
+    }
+
+    protected Object createInstance(BeanDefinition beanDefinition) {
         if (Objects.isNull(beanDefinition)) {
             return null;
         }
@@ -29,5 +36,19 @@ public class AutowireCapableBeanFactory extends AbstractBeanFactory {
             e.printStackTrace();
         }
         return null;
+    }
+
+    protected void applyPropertyValues(Object bean, BeanDefinition beanDefinition) {
+        beanDefinition.getPropertyValues().getPropertyValues().forEach(propertyValue -> {
+            try {
+                Field declaredField = bean.getClass().getDeclaredField(propertyValue.getName());
+                declaredField.setAccessible(true);
+                declaredField.set(bean, propertyValue.getValue());
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

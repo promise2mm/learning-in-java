@@ -1,7 +1,7 @@
 package com.yiming.learn.spring.tiny;
 
 /**
- * ${DESCRIPTION}
+ * bean定义
  *
  * @author yiming
  * @since 2018-07-27 17:09.
@@ -22,6 +22,11 @@ public class BeanDefinition {
      * bean 类全名称
      */
     private String beanClassName;
+
+    /**
+     * bean的属性列表
+     */
+    private PropertyValues propertyValues;
 
     public Object getBean() {
         return bean;
@@ -50,5 +55,13 @@ public class BeanDefinition {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public PropertyValues getPropertyValues() {
+        return propertyValues;
+    }
+
+    public void setPropertyValues(PropertyValues propertyValues) {
+        this.propertyValues = propertyValues;
     }
 }

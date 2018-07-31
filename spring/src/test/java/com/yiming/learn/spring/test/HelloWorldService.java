@@ -8,7 +8,17 @@ package com.yiming.learn.spring.test;
  */
 public class HelloWorldService {
 
+    private String text;
+
     public void sayHello() {
-        System.out.println("Hello World!");
+        System.out.println("Hello " + text + "!");
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
