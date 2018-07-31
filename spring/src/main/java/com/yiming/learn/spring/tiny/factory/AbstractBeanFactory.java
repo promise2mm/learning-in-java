@@ -20,11 +20,11 @@ public abstract class AbstractBeanFactory implements BeanFactory {
      */
     @Override
     public Object getBean(String name) {
-        Object beanDefinition = beanDefinitionMap.get(name).getBean();
-        if (beanDefinition == null) {
+        Object bean = beanDefinitionMap.get(name).getBean();
+        if (bean == null) {
             throw new IllegalArgumentException("Not found bean [" + name + "]!");
         }
-        return null;
+        return bean;
     }
 
     /**
