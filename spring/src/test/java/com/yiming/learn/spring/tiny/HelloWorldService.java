@@ -1,4 +1,4 @@
-package com.yiming.learn.spring.test;
+package com.yiming.learn.spring.tiny;
 
 /**
  * ${DESCRIPTION}

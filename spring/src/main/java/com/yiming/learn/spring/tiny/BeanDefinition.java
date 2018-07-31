@@ -26,7 +26,7 @@ public class BeanDefinition {
     /**
      * bean的属性列表
      */
-    private PropertyValues propertyValues;
+    private PropertyValues propertyValues = new PropertyValues();
 
     public Object getBean() {
         return bean;
