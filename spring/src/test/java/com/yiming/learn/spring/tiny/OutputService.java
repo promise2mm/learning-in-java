@@ -1,5 +1,7 @@
 package com.yiming.learn.spring.tiny;
 
+import java.util.Random;
+
 /**
  * ${DESCRIPTION}
  *
@@ -8,13 +10,13 @@ package com.yiming.learn.spring.tiny;
  */
 public class OutputService {
 
-    private HelloWorldService helloWorldService;
-
     public void sayHello(String text) {
+        try {
+            Thread.sleep(new Random().nextInt(1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("OutputService: Hello " + text + "!");
     }
 
-    public void setHelloWorldService(HelloWorldService helloWorldService) {
-        this.helloWorldService = helloWorldService;
-    }
 }

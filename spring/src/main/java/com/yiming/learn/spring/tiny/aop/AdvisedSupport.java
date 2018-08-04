@@ -10,8 +10,14 @@ import org.aopalliance.intercept.MethodInterceptor;
  */
 public class AdvisedSupport {
 
+    /**
+     * 代理目标对象
+     */
     private TargetSource targetSource;
 
+    /**
+     * 方法拦截器
+     */
     private MethodInterceptor methodInterceptor;
 
     public MethodInterceptor getMethodInterceptor() {
