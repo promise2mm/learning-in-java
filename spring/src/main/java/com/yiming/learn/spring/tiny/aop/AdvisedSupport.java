@@ -3,7 +3,7 @@ package com.yiming.learn.spring.tiny.aop;
 import org.aopalliance.intercept.MethodInterceptor;
 
 /**
- * ${DESCRIPTION}
+ * 被代理对象和拦截器的元数据
  *
  * @author yiming
  * @since 2018-07-31 17:43.
