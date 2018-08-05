@@ -1,6 +1,10 @@
 package com.yiming.learn.spring.tiny.context;
 
+import com.yiming.learn.spring.tiny.BeanPostProcessor;
 import com.yiming.learn.spring.tiny.beans.factory.AbstractBeanFactory;
+import com.yiming.learn.spring.tiny.beans.factory.BeanFactory;
+
+import java.util.List;
 
 /**
  * ${DESCRIPTION}
@@ -17,10 +21,26 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     }
 
     public void refresh() throws Exception {
+        loadBeanDefinitions(beanFactory);
+        registerBeanPostProcessor(beanFactory);
+        onRefresh();
+    }
+
+    protected void onRefresh() throws Exception {
+        beanFactory.preInstantiateSingletons();
     }
 
     @Override
-    public Object getBean(String name) {
+    public Object getBean(String name) throws Exception {
         return beanFactory.getBean(name);
+    }
+
+    protected abstract void loadBeanDefinitions(AbstractBeanFactory beanFactory) throws Exception;
+
+    protected void registerBeanPostProcessor(AbstractBeanFactory beanFactory) throws Exception {
+        List beanPostProcessors = beanFactory.getBeansForType(BeanPostProcessor.class);
+        for (Object beanPostProcessor : beanPostProcessors) {
+            beanFactory.addBeanPostProcessor((BeanPostProcessor) beanPostProcessor);
+        }
     }
 }

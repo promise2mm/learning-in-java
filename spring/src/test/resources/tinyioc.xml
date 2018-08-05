@@ -4,12 +4,23 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean name="outputService" class="com.yiming.learn.spring.tiny.OutputService"></bean>
+    <bean name="outputService" class="com.yiming.learn.spring.tiny.OutputServiceImpl"></bean>
 
     <bean name="helloWorldService"
           class="com.yiming.learn.spring.tiny.HelloWorldServiceImpl">
         <property name="text" value="yiming2"/>
         <property name="outputService" ref="outputService"/>
+    </bean>
+
+    <bean id="interceptor" class="com.yiming.learn.spring.tiny.aop.TimerInterceptor"></bean>
+
+    <bean id="advisorAutoProxyCreator"
+          class="com.yiming.learn.spring.tiny.aop.AspectJAwareAdvisorAutoProxyCreator"></bean>
+
+    <bean id="aspectJExpressionPointcutAdvisor"
+          class="com.yiming.learn.spring.tiny.aop.AspectJExpressionPointcutAdvisor">
+        <property name="advice" ref="interceptor"></property>
+        <property name="expression" value="execution(* com.yiming.learn.spring.tiny.*.*(..))"></property>
     </bean>
 
 </beans>

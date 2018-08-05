@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="outputService" class="com.yiming.learn.spring.tiny.OutputServiceImpl"/>
+
+    <bean id="helloWorldService" name="helloWorldService"
+          class="com.yiming.learn.spring.tiny.HelloWorldServiceImpl">
+        <property name="text" value="yiming2"/>
+        <property name="outputService" ref="outputService"/>
+    </bean>
+
+    <bean id="beanInitializeLogger" class="com.yiming.learn.spring.tiny.BeanInitializeLogger"></bean>
+
+</beans>

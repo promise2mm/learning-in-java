@@ -6,9 +6,11 @@ import com.yiming.learn.spring.tiny.BeanReference;
 import com.yiming.learn.spring.tiny.PropertyValue;
 import com.yiming.learn.spring.tiny.PropertyValues;
 import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
+
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,7 +58,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     private void processElement(Element e) {
-        String name = e.getAttribute("name");
+        String name = e.getAttribute("id");
         String clazz = e.getAttribute("class");
         BeanDefinition beanDefinition = new BeanDefinition();
         beanDefinition.setBeanClassName(clazz);
@@ -79,8 +81,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                     String ref = element.getAttribute("ref");
                     if (ref == null || ref.length() == 0) {
                         throw new IllegalArgumentException(
-                            "Configuration error: <property> element for property ["
-                                + name + "] must be specified a ref or value!");
+                                "Configuration error: <property> element for property ["
+                                        + name + "] must be specified a ref or value!");
                     }
                     BeanReference reference = new BeanReference();
                     reference.setName(ref);

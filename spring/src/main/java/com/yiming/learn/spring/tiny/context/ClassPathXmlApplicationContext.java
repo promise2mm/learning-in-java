@@ -1,9 +1,12 @@
 package com.yiming.learn.spring.tiny.context;
 
+import com.yiming.learn.spring.tiny.BeanDefinition;
 import com.yiming.learn.spring.tiny.beans.factory.AbstractBeanFactory;
 import com.yiming.learn.spring.tiny.beans.factory.AutowireCapableBeanFactory;
 import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
 import com.yiming.learn.spring.tiny.beans.xml.XmlBeanDefinitionReader;
+
+import java.util.Map;
 
 /**
  * ${DESCRIPTION}
@@ -26,9 +29,11 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
     }
 
     @Override
-    public void refresh() throws Exception {
+    protected void loadBeanDefinitions(AbstractBeanFactory beanFactory) throws Exception {
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(new ResourceLoader());
         reader.loadBeanDefinitions(configLocation);
-        reader.getRegistry().forEach(beanFactory::registryBeanDefinition);
+        for (Map.Entry<String, BeanDefinition> entry : reader.getRegistry().entrySet()) {
+            beanFactory.registryBeanDefinition(entry.getKey(), entry.getValue());
+        }
     }
 }

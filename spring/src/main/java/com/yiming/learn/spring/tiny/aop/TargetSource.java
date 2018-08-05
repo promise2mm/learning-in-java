@@ -11,23 +11,24 @@ public class TargetSource {
     /**
      * 被代理类
      */
-    private Class targetClass;
+    private Class<?>[] targetClass;
 
     /**
      * 被代理实际对象
      */
     private Object target;
 
-    public TargetSource(Object target, Class targetClass) {
+    public TargetSource(Object target, Class<?>... targetClass) {
         this.target = target;
         this.targetClass = targetClass;
     }
 
-    public Class getTargetClass() {
+    public Class<?>[] getTargetClass() {
         return targetClass;
     }
 
-    public void setTargetClass(Class targetClass) {
+    public void setTargetClass(Object target, Class<?>[] targetClass) {
+        this.target = target;
         this.targetClass = targetClass;
     }
 
@@ -35,7 +36,4 @@ public class TargetSource {
         return target;
     }
 
-    public void setTarget(Object target) {
-        this.target = target;
-    }
 }
