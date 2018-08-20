@@ -10,13 +10,13 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author yiming
  * @since 2018-07-31 18:06.
  */
-public class TimmerInterceptor implements MethodInterceptor {
+public class TimerInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-        int start = Instant.now().getNano();
+        long start = Instant.now().toEpochMilli();
         Object res = methodInvocation.proceed();
-        System.out.println("cost " + (Instant.now().getNano() - start) + " nanos.");
+        System.out.println("cost " + (Instant.now().toEpochMilli() - start) + " millis.");
         return res;
     }
 }

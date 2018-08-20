@@ -14,6 +14,6 @@ public interface BeanFactory {
      * @param name bean名称
      * @return bean对象
      */
-    Object getBean(String name);
+    Object getBean(String name) throws Exception;
 
 }

@@ -6,6 +6,8 @@ import com.yiming.learn.spring.tiny.beans.io.ResourceLoader;
 import com.yiming.learn.spring.tiny.beans.xml.XmlBeanDefinitionReader;
 import org.junit.Test;
 
+import java.util.Map;
+
 /**
  * ${DESCRIPTION}
  *
@@ -23,7 +25,9 @@ public class BeanFactoryTest {
 
         // 2. 初始化工厂
         AbstractBeanFactory beanFactory = new AutowireCapableBeanFactory();
-        reader.getRegistry().forEach(beanFactory::registryBeanDefinition);
+        for (Map.Entry<String, BeanDefinition> entry : reader.getRegistry().entrySet()) {
+            beanFactory.registryBeanDefinition(entry.getKey(), entry.getValue());
+        }
 
         // 3. 获取并使用bean
         HelloWorldServiceImpl helloWorldService = (HelloWorldServiceImpl) beanFactory.getBean("helloWorldService");
@@ -36,7 +40,9 @@ public class BeanFactoryTest {
         reader.loadBeanDefinitions("tinyioc.xml");
 
         AbstractBeanFactory factory = new AutowireCapableBeanFactory();
-        reader.getRegistry().forEach(factory::registryBeanDefinition);
+        for (Map.Entry<String, BeanDefinition> entry : reader.getRegistry().entrySet()) {
+            factory.registryBeanDefinition(entry.getKey(), entry.getValue());
+        }
 
         factory.preInstantiateSingletons();
 
