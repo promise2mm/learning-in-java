@@ -18,13 +18,10 @@ import scala.concurrent.duration.Duration;
 public class Worker extends UntypedActor {
     // Stop the CounterService child if it throws ServiceUnavailable
     private static SupervisorStrategy strategy = new OneForOneStrategy(-1,
-            Duration.Inf(), t -> {
-        if (t instanceof CounterServiceApi.ServiceUnavailable) {
-            return SupervisorStrategy.stop();
-        } else {
-            return SupervisorStrategy.escalate();
-        }
-    });
+            Duration.Inf(),
+            t -> t instanceof CounterServiceApi.ServiceUnavailable ?
+                    SupervisorStrategy.stop() :
+                    SupervisorStrategy.escalate());
     final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
     final Timeout askTimeout = new Timeout(Duration.create(5, "seconds"));
     final ActorRef counterService = getContext().actorOf(
@@ -44,17 +41,19 @@ public class Worker extends UntypedActor {
         log.debug("received message {}", msg);
         if (msg.equals(WorkerApi.Start) && progressListener == null) {
             progressListener = getSender();
+            // 开始后, 间隔向自己发送"do"消息
             getContext().system().scheduler().schedule(
                     Duration.Zero(), Duration.create(1, "second"), getSelf(), WorkerApi.Do,
-                    getContext().dispatcher(), null
-            );
+                    getContext().dispatcher(), null);
         } else if (msg.equals(WorkerApi.Do)) {
+            // 每次收到"do"消息, 向countService发送三次递增
             counterService.tell(new CounterServiceApi.Increment(1), getSelf());
             counterService.tell(new CounterServiceApi.Increment(1), getSelf());
             counterService.tell(new CounterServiceApi.Increment(1), getSelf());
 
             // Send current progress to the initial sender
-            Patterns.pipe(Patterns.ask(counterService, CounterServiceApi.GetCurrentCount, askTimeout)
+            Patterns.pipe(
+                    Patterns.ask(counterService, CounterServiceApi.GetCurrentCount, askTimeout)
                     .mapTo(Util.classTag(CounterServiceApi.CurrentCount.class))
                     .map(new Mapper<CounterServiceApi.CurrentCount, WorkerApi.Progress>() {
                         @Override
