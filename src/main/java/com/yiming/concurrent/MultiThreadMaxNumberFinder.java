@@ -1,5 +1,6 @@
 package com.yiming.concurrent;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -25,20 +26,31 @@ public class MultiThreadMaxNumberFinder {
             throw new IllegalArgumentException("array must not be empty!");
         }
 
-        FindMaxTask task1 = new FindMaxTask(data, 0, data.length / 2);
-        FindMaxTask task2 = new FindMaxTask(data, data.length / 2, data.length);
+        ExecutorService executorService =
+                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-
-        Future<Integer> max1 = executorService.submit(task1);
-        Future<Integer> max2 = executorService.submit(task2);
+        int workCount = 10;
+        int size = data.length / workCount;
+        int max = 0;
+        for (int i = 0; i < workCount; i++) {
+            Integer[] temp = new Integer[size];
+            System.arraycopy(data, i * size, temp, 0, size);
+            FindMaxTask task = new FindMaxTask(temp);
+            Future<Integer> future = executorService.submit(task);
+            Integer result = future.get();
+            if (result.compareTo(max) > 0) {
+                max = result;
+            }
+        }
         executorService.shutdown();
-        return Math.max(max1.get(), max2.get());
+        return max;
     }
 
     public static void main(String[] args) {
-        int size = 100000;
-        List<Integer> list = Stream.generate(() -> (int) (Math.random() * size)).limit(size).collect(Collectors.toList());
+        int size = 10000000;
+        System.out.println("正在生成"+size+"个随机数...");
+        List<Integer> list = Stream.generate(() -> (int) (Math.random() * 100000L)).parallel().limit(size).collect(Collectors.toList());
+        System.out.println("生成随机数完毕.");
         try {
             System.out.println(max(list.toArray(new Integer[list.size()])));
         } catch (ExecutionException | InterruptedException e) {
