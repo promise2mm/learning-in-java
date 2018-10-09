@@ -16,10 +16,10 @@ import scala.concurrent.duration.Duration;
  * The Worker supervise the CounterService.
  */
 public class Worker extends UntypedActor {
-    // Stop the CounterService child if it throws ServiceUnavailable
+    // Stop the CounterService child if it throws ServiceUnavailableException
     private static SupervisorStrategy strategy = new OneForOneStrategy(-1,
             Duration.Inf(),
-            t -> t instanceof CounterServiceApi.ServiceUnavailable ?
+            t -> t instanceof CounterServiceApi.ServiceUnavailableException ?
                     SupervisorStrategy.stop() :
                     SupervisorStrategy.escalate());
     final LoggingAdapter log = Logging.getLogger(getContext().system(), this);

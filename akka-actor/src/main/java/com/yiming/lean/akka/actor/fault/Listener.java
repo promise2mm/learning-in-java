@@ -31,7 +31,7 @@ public class Listener extends UntypedActor {
                 getContext().system().terminate();
             }
         } else if (msg == ReceiveTimeout.getInstance()) {
-            // No progress within 15 seconds, ServiceUnavailable
+            // No progress within 15 seconds, ServiceUnavailableException
             log.error("Shutting down due to unavailable service");
             getContext().system().terminate();
         } else {

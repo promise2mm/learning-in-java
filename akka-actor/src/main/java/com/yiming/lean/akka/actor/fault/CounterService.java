@@ -3,7 +3,6 @@ package com.yiming.lean.akka.actor.fault;
 import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.japi.Function;
 import scala.concurrent.duration.Duration;
 
 import java.util.ArrayList;
@@ -18,38 +17,19 @@ public class CounterService extends UntypedActor {
 
     // Reconnect message
     static final Object Reconnect = "Reconnect";
-
-    private static class SenderMsgPair {
-        final ActorRef sender;
-        final Object msg;
-
-        SenderMsgPair(ActorRef sender, Object msg) {
-            this.msg = msg;
-            this.sender = sender;
-        }
-    }
-
-    final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-    final String key = getSelf().path().name();
-    ActorRef storage;
-    ActorRef counter;
-    final List<SenderMsgPair> backlog = new ArrayList<SenderMsgPair>();
-    final int MAX_BACKLOG = 10000;
-
     // Restart the storage child when StorageException is thrown.
     // After 3 restarts within 5 seconds it will be stopped.
     private static SupervisorStrategy strategy = new OneForOneStrategy(3,
-            Duration.create("5 seconds"), new Function<Throwable, SupervisorStrategy.Directive>() {
-
-        @Override
-        public SupervisorStrategy.Directive apply(Throwable t) {
-            if (t instanceof StorageApi.StorageException) {
-                return SupervisorStrategy.restart();
-            } else {
-                return SupervisorStrategy.escalate();
-            }
-        }
-    });
+            Duration.create("5 seconds"),
+            t -> t instanceof StorageApi.StorageException ?
+                    SupervisorStrategy.restart() :
+                    SupervisorStrategy.escalate());
+    final LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+    final String key = getSelf().path().name();
+    final List<SenderMsgPair> backlog = new ArrayList<SenderMsgPair>();
+    final int MAX_BACKLOG = 10000;
+    ActorRef storage;
+    ActorRef counter;
 
     @Override
     public SupervisorStrategy supervisorStrategy() {
@@ -121,11 +101,21 @@ public class CounterService extends UntypedActor {
         // to the counter when it is initialized.
         if (counter == null) {
             if (backlog.size() >= MAX_BACKLOG)
-                throw new CounterServiceApi.ServiceUnavailable("CounterService not available," +
+                throw new CounterServiceApi.ServiceUnavailableException("CounterService not available," +
                         " lack of initial value");
             backlog.add(new SenderMsgPair(getSender(), msg));
         } else {
             counter.forward(msg, getContext());
+        }
+    }
+
+    private static class SenderMsgPair {
+        final ActorRef sender;
+        final Object msg;
+
+        SenderMsgPair(ActorRef sender, Object msg) {
+            this.msg = msg;
+            this.sender = sender;
         }
     }
 }
