@@ -1,4 +1,4 @@
-package com.yiming.learn.algorithm.leetcode;
+package com.yiming.learn.algorithm.leetcode.medium;
 
 import org.junit.Test;
 
