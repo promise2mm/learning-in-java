@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSON;
  * Created by yiming on 2018-04-28 10:29.
  * Description:
  *
- * @author <a href="mailto:nishibin@cai-inc.com"></a>
  */
 
 public class ExceptionDemo {

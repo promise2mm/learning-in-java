@@ -4,7 +4,6 @@ package com.yiming.learn.java.basic.common;
  * Created by yiming on 2018-04-28 10:37.
  * Description:
  *
- * @author <a href="mailto:nishibin@cai-inc.com"></a>
  */
 
 import com.google.common.base.MoreObjects;
