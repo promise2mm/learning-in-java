@@ -17,6 +17,6 @@ public class Demo {
 
     public void testRevert() {
         System.out.println("base commit.");
-        System.out.println("do not commit.");
+        System.out.println("commit won't be push.");
     }
 }
