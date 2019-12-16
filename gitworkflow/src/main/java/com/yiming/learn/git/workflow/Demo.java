@@ -14,4 +14,8 @@ public class Demo {
         System.out.println("v1.0 - 007");
         System.out.println("master");
     }
+
+    public void testRevert() {
+        System.out.println("base commit.");
+    }
 }
