@@ -28,7 +28,7 @@
     <dependency>
       <artifactId>guava</artifactId>
       <groupId>com.google.guava</groupId>
-      <version>23.0</version>
+      <version>24.1.1</version>
     </dependency>
     <dependency>
       <artifactId>lombok</artifactId>
