@@ -66,6 +66,7 @@
     <module>gitworkflow</module>
     <module>algorithm</module>
     <module>akka-actor</module>
+    <module>3rd-party-tools</module>
   </modules>
 
   <packaging>pom</packaging>
